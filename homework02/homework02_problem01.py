@@ -10,7 +10,7 @@ class Quotes:
         self.page = requests.get(self.url)
         self.response = TextResponse(body=self.page.text, url=self.url, encoding="utf-8")
 
-    def get_quote_info(self):
+    def get_quotes_info(self):
         does_next_page_exist = True
         authors = []
         quotes = []
@@ -23,16 +23,13 @@ class Quotes:
         return authors, quotes, tags
 
     def __get_authors(self):
-        authors = (self.response.css("small.author::text").extract())
-        return authors
+        return self.response.css("small.author::text").extract()
 
     def __get_quotes(self):
-        quotes = self.response.css("span.text::text").extract()
-        return quotes
+        return self.response.css("span.text::text").extract()
 
     def __get_tags(self):
-        tags = [i.css("a.tag::text").extract() for i in self.response.css("div.tags")]
-        return tags
+        return [i.css("a.tag::text").extract() for i in self.response.css("div.tags")]
 
     def __is_next_page_available(self):
         next_page_path = self.response.css("li.next a::attr(href)").extract_first()
@@ -46,5 +43,5 @@ class Quotes:
 
 
 quotes_page = Quotes(url)
-print(quotes_page.get_quote_info())
+print(quotes_page.get_quotes_info())
 
